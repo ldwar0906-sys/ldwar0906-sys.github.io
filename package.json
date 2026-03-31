@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "homepage": "https://ldwar0906-sys.github.io/Artd-Web",
+  "homepage": "https://ldwar0906-sys.github.io/artdweb",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -22,14 +22,14 @@
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.27",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
-    "postcss": "^8.5.8",
-    "tailwindcss": "^3.4.19",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
     "vite": "^6.0.5"
   }
 }
