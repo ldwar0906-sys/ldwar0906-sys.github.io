@@ -11,10 +11,37 @@ import {
   ArrowLeft, 
   Tag, 
   LayoutGrid, 
-  Youtube 
+  Youtube,
+  Phone,
+  MessageSquare
 } from 'lucide-react';
 
-// --- [1. 스마트 썸네일 컴포넌트 (Memo 적용으로 깜빡임 방지)] ---
+// --- [커스텀 아이콘 정의] ---
+const KakaoIcon = ({ size = 24, ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M12 3c-4.97 0-9 3.18-9 7.1 0 2.53 1.63 4.76 4.14 6.04-.17.58-.61 2.12-.7 2.45-.11.43.16.42.33.31.14-.09 2.19-1.48 3.06-2.08.7.13 1.43.19 2.17.19 4.97 0 9-3.18 9-7.1S16.97 3 12 3z"/>
+  </svg>
+);
+
+const BlogIcon = ({ size = 24, ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M16.444 19.143l1.107 1.107c.39.39 1.024.39 1.414 0l1.107-1.107c.39-.39.39-1.024 0-1.414l-1.107-1.107a5.53 5.53 0 00-6.143-8.857 5.53 5.53 0 00-8.857 6.143 5.53 5.53 0 008.857 6.143 5.53 5.53 0 004.582-1.011l.144.103zm-7.666-4.921l-1.414-1.414.707-.707 1.414 1.414-.707.707zm2.828-2.828l-1.414-1.414.707-.707 1.414 1.414-.707.707z"/>
+  </svg>
+);
+
+const Instagram = ({ size = 24, ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+  </svg>
+);
+
+const Facebook = ({ size = 24, ...props }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+  </svg>
+);
+
+// --- [1. 스마트 썸네일 컴포넌트] ---
 const SmartImage = React.memo(({ srcBase, alt, onHide }) => {
   const [ext, setExt] = useState('jpg');
   const [errorCount, setErrorCount] = useState(0);
@@ -83,7 +110,7 @@ const SeriesImageContainer = ({ project }) => {
         <SmartSeriesImage 
           key={`${project.id}-${i}`}
           index={i + 1}
-          srcBase={`${project.seriesBasePath}/${project.seriesPrefix}_${i + 1}`}
+          srcBase={`${project.seriesBasePath}/${i + 1}`} 
           onSuccess={i + 1 === maxVisible ? handleSuccess : undefined}
         />
       ))}
@@ -91,56 +118,34 @@ const SeriesImageContainer = ({ project }) => {
   );
 };
 
-// --- [SVG 아이콘] ---
-const Instagram = ({ size = 24, ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-);
-const Facebook = ({ size = 24, ...props }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-);
-
 // --- [포트폴리오 데이터 생성] ---
 const generateProjects = () => {
   const projects = [];
   let idCounter = 1;
   const baseUrl = "";
 
-  const customTitles = {
-    "no1": "주식회사 서현 회사소개서",
-    "no2": "웰템 제품 카달로그",
-    "no3": "SM Engineering 기업소개서",
-    "no4": "캡스톤디자인 운영 매뉴얼북",
-    "no5": "경남응급의료지원단 CI매뉴얼북",
-    "no6": "경남자립지원전담기관 소식지",
-    "no7": "모드텍 카달로그",
-    "no8": "세덕종합벨트 카달로그",
-    "no9": "엠티에스 회사소개서 카달로그",
-    "no10": "울산 어린이독서체험관 캐릭터 매뉴얼북",
-    "no11": "원진BMT 카달로그",
-    "no12": "이플로우 카달로그",
-    "no13": "태양테크 회사소개서"
-  };
-
-  const getIds = (count) => {
-     const arr = [];
-     for(let i=0; i<count; i++) arr.push(`no${i+1}`);
-     return arr;
-  };
-
   const addSmartSeries = (category, dataMap) => {
     Object.entries(dataMap).forEach(([sub, data]) => {
-      data.ids.forEach((id) => {
-        if (id && id.trim()) {
+      data.ids.forEach((folderName) => {
+        if (folderName && folderName.trim()) {
+          const underscoreIndex = folderName.indexOf('_');
+          let displayTitle = "";
+          
+          if (underscoreIndex !== -1) {
+            displayTitle = folderName.substring(underscoreIndex + 1);
+          } else {
+            displayTitle = `${sub} 작업 ${folderName.replace('no', '')}`;
+          }
+
           projects.push({
             id: idCounter++,
             category,
             subCategory: sub,
             isSmart: true,
             isSeries: true,
-            srcBase: `${baseUrl}${data.path}/${id}/${id}_1`, 
-            seriesBasePath: `${baseUrl}${data.path}/${id}`,  
-            seriesPrefix: id,                                
-            title: customTitles[id] || `${sub} 작업 ${id.replace('no', '')}`,
+            srcBase: `${baseUrl}${data.path}/${folderName}/1`,
+            seriesBasePath: `${baseUrl}${data.path}/${folderName}`,  
+            title: displayTitle,
             year: "2024",
             description: `${sub} 기획 및 디자인 결과물입니다.`
           });
@@ -150,19 +155,36 @@ const generateProjects = () => {
   };
 
   const editorialData = {
-    "카달로그·브로슈어": { path: "/images/EDITORIAL/CatalogBrochure", ids: getIds(13) },
-    "리플렛·팜플렛": { path: "/images/EDITORIAL/LeafletPamphlet", ids: getIds(0) },
-    "포스터": { path: "/images/EDITORIAL/Poster", ids: getIds(0) }
+    "카달로그·브로슈어": { 
+      path: "/images/EDITORIAL/CatalogBrochure", 
+      ids: [
+        "no1_경남대학교 캡스톤디자인 운영 매뉴얼북",
+        "no2_경상남도 응급의료지원단 CI매뉴얼북",
+        "no3_경상남도 자립지원전담기관 소식지",
+        "no4_울산광역시 어린이독서체험관 캐릭터 매뉴얼북",
+        "no5_이플로우 카달로그",
+        "no6_SM 엔지니어링 카달로그",
+        "no7_MTS 카달로그",
+        "no8_모드텍 카달로그",
+        "no9_서현 카달로그",
+        "no10_세덕종합벨트 카달로그",
+        "no11_원진 BMT",
+        "no12_웰템 카달로그",
+        "no13_태양테크 회사소개서"
+      ] 
+    },
+    "리플렛·팜플렛": { path: "/images/EDITORIAL/LeafletPamphlet", ids: [] },
+    "포스터": { path: "/images/EDITORIAL/Poster", ids: [] }
   };
   addSmartSeries("EDITORIAL", editorialData);
 
   const signageData = {
-    "간판·시트지": { path: "/images/SIGNAGE/SignboardSheet", ids: getIds(0) },
-    "현수막·배너": { path: "/images/SIGNAGE/Banner", ids: getIds(0) }
+    "간판·시트지": { path: "/images/SIGNAGE/SignboardSheet", ids: [] },
+    "현수막·배너": { path: "/images/SIGNAGE/Banner", ids: [] }
   };
   addSmartSeries("SIGNAGE", signageData);
 
-  const webData = { "웹 콘텐츠": { path: "/images/WEB/Contents", ids: getIds(0) } };
+  const webData = { "웹 콘텐츠": { path: "/images/WEB/Contents", ids: [] } };
   addSmartSeries("WEB", webData);
 
   const brandingImages = ["https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=800"];
@@ -172,9 +194,7 @@ const generateProjects = () => {
     }
   });
 
-  const videoIds = [
-    { id: "hsS_3X64YbE", start: 3248 }, { id: "Abh9eKQcIuE" }, { id: "FOOkzuEfwXk", start: 874 }
-  ];
+  const videoIds = [{ id: "hsS_3X64YbE", start: 3248 }, { id: "Abh9eKQcIuE" }, { id: "FOOkzuEfwXk", start: 874 }];
   videoIds.forEach((v, i) => {
     if (v && v.id && v.id.trim()) {
       projects.push({ id: idCounter++, category: "VIDEO", youtubeId: v.id, startParam: v.start ? `&start=${v.start}` : "", img: `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`, title: `영상 작업 ${i + 1}`, year: "2024", description: "영상 제작 프로젝트입니다." });
@@ -186,7 +206,6 @@ const generateProjects = () => {
 
 const allProjects = generateProjects();
 
-// --- [ProjectCard 컴포넌트 (Memo 적용)] ---
 const ProjectCard = React.memo(({ project, currentTab, onSelect, onFail }) => {
   const aspectClass = (project.category === 'VIDEO' && currentTab === 'VIDEO') ? 'aspect-video' : 'aspect-[4/5]';
   const brandColor = "#EE7123";
@@ -228,12 +247,11 @@ const App = () => {
 
   const brandColor = "#EE7123";
 
-  const handleContactSubmit = (e) => {
-    e.preventDefault();
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    const content = e.target.content.value;
-    window.location.href = `mailto:design10040@naver.com?subject=[ArtDesign 문의] ${name}님의 프로젝트 문의&body=성함/기업명: ${name}%0D%0A회신 이메일: ${email}%0D%0A%0D%0A내용:%0D%0A${content}`;
+  const socialLinks = {
+    kakao: "https://pf.kakao.com/_kqdwG", 
+    blog: "https://blog.naver.com/design10040", 
+    youtube: "https://www.youtube.com/@ArtDesign777", 
+    instagram: "https://www.instagram.com/art_design.hs/", 
   };
 
   const navLinks = [
@@ -276,6 +294,19 @@ const App = () => {
     setSelectedProject(project);
   }, []);
 
+  const handleCategoryChange = (catId) => {
+    setActiveCategory(catId);
+    setActiveSubCategory('전체');
+  };
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const content = e.target.content.value;
+    window.location.href = `mailto:design10040@naver.com?subject=[ArtDesign 문의] ${name}님의 프로젝트 문의&body=성함/기업명: ${name}%0D%0A회신 이메일: ${email}%0D%0A%0D%0A내용:%0D%0A${content}`;
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -301,7 +332,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-white text-slate-900 font-pretendard selection:bg-[#EE7123] selection:text-white scroll-smooth overflow-x-hidden relative font-pretendard">
       
-      {/* 상세 오버레이 (통스크롤 레이아웃) */}
+      {/* 상세 오버레이 */}
       {selectedProject && (
         <div className="fixed inset-0 bg-white z-[500] overflow-y-auto custom-scrollbar animate-in fade-in duration-300 font-pretendard">
           <div className="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
@@ -312,18 +343,16 @@ const App = () => {
               </button>
             </div>
           </div>
-
           <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-16 flex flex-col items-center">
             <div className="flex flex-col items-center text-center mb-16 animate-in slide-in-from-bottom duration-700">
               <div className="flex items-center space-x-4 mb-6">
                 <span className="px-5 py-2 bg-orange-50 text-[#EE7123] rounded-full text-xs font-black tracking-widest uppercase shadow-sm">{selectedProject.subCategory || selectedProject.category}</span>
                 <span className="text-slate-400 font-bold text-xs">2024 PORTFOLIO</span>
               </div>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-8 leading-tight text-slate-900">{selectedProject.title}</h2>
-              <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-light max-w-3xl mb-12">{selectedProject.description}</p>
-              <button onClick={() => {setSelectedProject(null); window.location.hash = "#contact";}} className="px-12 py-5 bg-slate-950 text-white font-black tracking-widest rounded-full hover:bg-[#EE7123] transition-all shadow-xl hover:-translate-y-1 uppercase">Inquiry for this style</button>
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-8 leading-tight text-slate-900">{selectedProject.title}</h2>
+              <p className="text-lg text-slate-600 leading-relaxed font-light max-w-3xl mb-12">{selectedProject.description}</p>
+              <button onClick={() => {setSelectedProject(null); window.location.hash = "#contact";}} className="px-10 py-4 bg-slate-950 text-white font-black tracking-widest rounded-full hover:bg-[#EE7123] transition-all shadow-xl hover:-translate-y-1 uppercase">Inquiry for this style</button>
             </div>
-
             <div className="w-full rounded-[32px] overflow-hidden shadow-2xl bg-slate-50 border border-slate-100 flex flex-col animate-in slide-in-from-bottom duration-1000 delay-150 fill-mode-both">
               {selectedProject.youtubeId ? (
                  <div className="relative w-full aspect-video shrink-0 bg-black">
@@ -352,11 +381,12 @@ const App = () => {
               </button>
               <div className="flex items-center space-x-2 font-pretendard"><LayoutGrid size={18} className="text-[#EE7123]" /><span className="text-white font-black tracking-widest text-xs uppercase font-pretendard">{activeCategory} Archive</span></div>
             </div>
+            
             <div className="mb-16 font-pretendard text-center md:text-left">
-              <h2 className="text-4xl md:text-6xl font-black tracking-tighter italic text-white mb-12 uppercase font-pretendard">{activeCategory} Works</h2>
-              <div className="flex flex-wrap gap-4 relative z-20 font-pretendard">
+              <h2 className="text-3xl md:text-5xl font-black tracking-tighter italic text-white mb-12 uppercase font-pretendard">{activeCategory} Works</h2>
+              <div className="flex flex-wrap gap-4 relative z-20 font-pretendard mb-8">
                 {categoryData.map((cat) => (
-                  <button key={`archive-${cat.id}`} onClick={() => {setActiveCategory(cat.id); setActiveSubCategory('전체');}} className={`group relative h-12 overflow-hidden px-8 rounded-full border transition-all tracking-widest ${activeCategory === cat.id ? 'bg-[#EE7123] border-[#EE7123] text-white shadow-lg' : 'border-white/10 text-slate-400 hover:text-white hover:border-white/30'}`}>
+                  <button key={`archive-cat-${cat.id}`} onClick={() => handleCategoryChange(cat.id)} className={`group relative h-12 overflow-hidden px-8 rounded-full border transition-all tracking-widest ${activeCategory === cat.id ? 'bg-[#EE7123] border-[#EE7123] text-white shadow-lg' : 'border-white/10 text-slate-400 hover:text-white hover:border-white/30'}`}>
                     <div className="transition-transform duration-500 ease-in-out group-hover:-translate-y-1/2 flex flex-col items-center justify-start h-[96px]">
                       <span className="h-12 w-full flex items-center justify-center font-black text-[12px] uppercase font-pretendard">{cat.kr}</span>
                       <span className="h-12 w-full flex items-center justify-center font-black text-[13px] whitespace-nowrap font-pretendard">{cat.kr}</span>
@@ -364,11 +394,18 @@ const App = () => {
                   </button>
                 ))}
               </div>
+              {(activeCategory === 'EDITORIAL' || activeCategory === 'SIGNAGE') && (
+                <div className="flex flex-wrap gap-2 mb-12 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit mx-auto md:mx-0 font-pretendard animate-in fade-in zoom-in duration-500">
+                  {categoryData.find(c => c.id === activeCategory).sub.map(sub => (
+                    <button key={`archive-sub-${sub}`} onClick={() => setActiveSubCategory(sub)} className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeSubCategory === sub ? 'bg-[#EE7123] text-white' : 'text-slate-400 hover:text-white font-pretendard'}`}>{sub}</button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="mb-6 text-slate-400 text-sm font-bold tracking-widest uppercase font-pretendard">Showing: <span className="text-white">{filteredProjects.length}</span> Projects</div>
             <div className={`grid md:grid-cols-2 ${activeCategory === 'VIDEO' ? 'lg:grid-cols-2 max-w-6xl mx-auto' : 'lg:grid-cols-4'} gap-x-6 gap-y-12 pb-24 font-pretendard`}>
               {filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} currentTab={activeCategory} onSelect={handleSelectProject} onFail={() => handleProjectFail(project.id)} />
+                <ProjectCard key={`archive-card-${project.id}`} project={project} currentTab={activeCategory} onSelect={handleSelectProject} onFail={() => handleProjectFail(id)} />
               ))}
             </div>
           </div>
@@ -386,7 +423,6 @@ const App = () => {
           </div>
           <button className={`lg:hidden ${!isScrolled ? 'text-white' : 'text-slate-900'}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>{isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
         </div>
-
         {isMobileMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-slate-100 flex flex-col py-2 animate-in slide-in-from-top-2 duration-300 font-pretendard">
             {navLinks.map((link) => (
@@ -409,41 +445,52 @@ const App = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1600')] bg-cover bg-center opacity-40 animate-subtle-zoom" />
         <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-12 text-white font-pretendard">
           <span className="inline-block font-bold tracking-[0.4em] text-sm mb-4 uppercase italic font-pretendard" style={{ color: brandColor }}>Visual & Motion Studio</span>
-          {/* --- 메인 타이틀 --- */}
-          <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-none uppercase font-pretendard">
-            ART DESIGN STUDIO<br />감각을 담아,<br />일상을더하다.
-            </h1>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-loose uppercase font-pretendard">
+          <span className="block mb-2">감각을 담아,</span> 
+          <span className="block">일상을 더하다.</span>
+          </h1>
           <a href="#create" className="px-10 py-5 bg-[#EE7123] rounded-full font-bold inline-flex items-center group shadow-xl transition-transform hover:scale-105 uppercase tracking-widest text-sm font-pretendard">Project Archive <ArrowUpRight className="ml-2 group-hover:rotate-45 transition-transform" /></a>
         </div>
       </section>
 
+      {/* COMPANY */}
       <section id="company" className="py-32 bg-white font-pretendard">
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-20 items-start font-pretendard">
           <div className="sticky top-32">
             <span className="font-bold tracking-[0.3em] text-sm uppercase mb-6 block font-pretendard" style={{ color: brandColor }}>01 / COMPANY</span>
-            {/* --- 컴퍼니 타이틀 --- */}
-            <h2 className="text-4xl md:text-6xl font-black mb-8 tracking-tighter font-pretendard">
-              보이는 디자인을 넘어, 경험을 디자인합니다.<br />시각 디자인 전문회사 아트디자인
+            <h2 className="text-3xl md:text-4xl font-black mb-8 tracking-tighter font-pretendard leading-tight text-slate-900">
+              보이는 디자인을 넘어,<br />경험을 디자인합니다.<br />시각 디자인 전문회사 아트디자인
             </h2>
             <p className="text-slate-500 text-lg leading-relaxed mb-10 font-light font-pretendard">
               브랜딩부터 편집, 인쇄, 영상, 사인물, 공간까지<br />아트디자인은 일상 속 브랜드 경험을 만들어갑니다.
-              </p>
-            <div className="grid grid-cols-2 gap-8 font-pretendard"><div className="flex items-center space-x-4 font-pretendard"><div className="p-3 bg-orange-50 rounded-xl" style={{ color: brandColor }}><FileText size={24}/></div><div className="font-bold font-pretendard">Print Media</div></div><div className="flex items-center space-x-4 font-pretendard"><div className="p-3 bg-orange-50 rounded-xl" style={{ color: brandColor }}><Play size={24}/></div><div className="font-bold font-pretendard">Motion Film</div></div></div>
+            </p>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-6 mt-12 font-pretendard">
+              <div className="flex items-center space-x-4"><div className="p-3 bg-orange-50 rounded-xl" style={{ color: brandColor }}><Tag size={24}/></div><div className="font-bold font-pretendard">Branding</div></div>
+              <div className="flex items-center space-x-4"><div className="p-3 bg-orange-50 rounded-xl" style={{ color: brandColor }}><FileText size={24}/></div><div className="font-bold font-pretendard">Print Design</div></div>
+              <div className="flex items-center space-x-4"><div className="p-3 bg-orange-50 rounded-xl" style={{ color: brandColor }}><Play size={24}/></div><div className="font-bold font-pretendard">Video Production</div></div>
+              <div className="flex items-center space-x-4"><div className="p-3 bg-orange-50 rounded-xl" style={{ color: brandColor }}><LayoutGrid size={24}/></div><div className="font-bold font-pretendard">Signage Design</div></div>
+            </div>
           </div>
           <div className="space-y-12">
-            <div className="aspect-[16/10] bg-slate-100 rounded-3xl overflow-hidden shadow-2xl relative border border-slate-100 group"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1200&auto=format&fit=crop" alt="Studio" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" /></div>
-            <div className="grid grid-cols-2 gap-10 font-pretendard"><div><div className="text-4xl font-black text-slate-900 mb-2 tracking-tight">3,500+</div><div className="text-sm font-bold text-slate-400 uppercase tracking-widest font-pretendard">Works</div></div><div><div className="text-4xl font-black text-slate-900 mb-2 tracking-tight font-pretendard">24Yrs</div><div className="text-sm font-bold text-slate-400 uppercase tracking-widest font-pretendard">History</div></div></div>
+            <div className="aspect-[16/10] bg-slate-100 rounded-3xl overflow-hidden shadow-2xl relative border border-slate-100 group">
+              <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1200&auto=format&fit=crop" alt="Studio" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            </div>
+            <div className="grid grid-cols-2 gap-10 font-pretendard">
+              <div><div className="text-4xl font-black text-slate-900 mb-2 tracking-tight">1,200+</div><div className="text-sm font-bold text-slate-400 uppercase tracking-widest font-pretendard">Works</div></div>
+              <div><div className="text-4xl font-black text-slate-900 mb-2 tracking-tight font-pretendard">10Yrs</div><div className="text-sm font-bold text-slate-400 uppercase tracking-widest font-pretendard">History</div></div>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* PORTFOLIO */}
       <section id="create" className="py-32 bg-slate-950 text-white font-pretendard">
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 font-pretendard">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 font-pretendard">
-            <div><span className="font-bold tracking-[0.3em] text-sm uppercase mb-4 block font-pretendard" style={{ color: brandColor }}>02 / WHAT WE CREATE</span><h2 className="text-4xl md:text-6xl font-black tracking-tighter italic font-pretendard">Portfolio</h2></div>
+            <div><span className="font-bold tracking-[0.3em] text-sm uppercase mb-4 block font-pretendard" style={{ color: brandColor }}>02 / WHAT WE CREATE</span><h2 className="text-3xl md:text-5xl font-black tracking-tighter italic font-pretendard">Portfolio</h2></div>
             <div className="flex flex-wrap gap-4 font-pretendard">
               {categoryData.map((cat) => (
-                <button key={`filter-${cat.id}`} onClick={() => {setActiveCategory(cat.id); setActiveSubCategory('전체');}} className={`px-8 py-3 rounded-full border text-[12px] font-black tracking-widest transition-all ${activeCategory === cat.id ? 'bg-[#EE7123] border-[#EE7123] text-white shadow-lg' : 'border-white/10 text-slate-400 hover:text-white font-pretendard'}`}>{cat.kr}</button>
+                <button key={`filter-${cat.id}`} onClick={() => handleCategoryChange(cat.id)} className={`px-8 py-3 rounded-full border text-[12px] font-black tracking-widest transition-all ${activeCategory === cat.id ? 'bg-[#EE7123] border-[#EE7123] text-white shadow-lg' : 'border-white/10 text-slate-400 hover:text-white font-pretendard'}`}>{cat.kr}</button>
               ))}
             </div>
           </div>
@@ -451,14 +498,14 @@ const App = () => {
           {(activeCategory === 'EDITORIAL' || activeCategory === 'SIGNAGE') && (
             <div className="flex flex-wrap gap-2 mb-12 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit font-pretendard">
               {categoryData.find(c => c.id === activeCategory).sub.map(sub => (
-                <button key={sub} onClick={() => setActiveSubCategory(sub)} className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeSubCategory === sub ? 'bg-[#EE7123] text-white' : 'text-slate-400 hover:text-white font-pretendard'}`}>{sub}</button>
+                <button key={`sub-tab-${sub}`} onClick={() => setActiveSubCategory(sub)} className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeSubCategory === sub ? 'bg-[#EE7123] text-white' : 'text-slate-400 hover:text-white font-pretendard'}`}>{sub}</button>
               ))}
             </div>
           )}
           
           <div className={`grid md:grid-cols-2 ${activeCategory === 'VIDEO' ? 'lg:grid-cols-2 max-w-6xl mx-auto' : 'lg:grid-cols-3'} gap-10 font-pretendard`}>
             {displayedProjects.map((project) => (
-              <ProjectCard key={`main-${project.id}`} project={project} currentTab={activeCategory} onSelect={handleSelectProject} onFail={() => handleProjectFail(project.id)} />
+              <ProjectCard key={`main-card-${project.id}`} project={project} currentTab={activeCategory} onSelect={handleSelectProject} onFail={() => handleProjectFail(project.id)} />
             ))}
           </div>
 
@@ -470,14 +517,45 @@ const App = () => {
         </div>
       </section>
 
+      {/* CONTACT */}
       <section id="contact" className="py-32 bg-white font-pretendard">
-        <div className="max-w-[1600px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-24 font-pretendard">
-          <div className="font-pretendard"><span className="font-bold tracking-[0.3em] text-sm uppercase mb-6 block font-pretendard" style={{ color: brandColor }}>03 / CONTACT US</span><h2 className="text-4xl md:text-6xl font-black mb-12 tracking-tighter italic leading-none font-pretendard">Work Together</h2><div className="space-y-10 font-pretendard"><div className="flex items-start space-x-6 font-pretendard"><div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 font-pretendard" style={{ color: brandColor }}><MapPin size={24} /></div><div><h4 className="font-black text-xs text-slate-400 uppercase tracking-widest mb-2 font-pretendard">Studio</h4><p className="text-xl font-bold font-pretendard">경남 창원시 마산회원구 3·15대로 509 3층</p></div></div><div className="flex items-start space-x-6 font-pretendard"><div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 font-pretendard" style={{ color: brandColor }}><Mail size={24} /></div><div><h4 className="font-black text-xs text-slate-400 uppercase tracking-widest mb-2 font-pretendard">Email</h4><p className="text-xl font-bold font-pretendard">design10040@naver.com</p></div></div></div></div>
-          <div className="bg-slate-50 p-10 rounded-[40px] shadow-sm border border-slate-100 font-pretendard">
-            <form className="space-y-6 font-pretendard" onSubmit={handleContactSubmit}>
-              <div className="grid md:grid-cols-2 gap-6 font-pretendard"><input required name="name" type="text" className="w-full bg-white rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#EE7123] outline-none transition-all font-pretendard" placeholder="성함/기업명" /><input required name="email" type="email" className="w-full bg-white rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#EE7123] outline-none transition-all font-pretendard" placeholder="회신 이메일 주소" /></div>
-              <textarea required name="content" rows={4} className="w-full bg-white rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#EE7123] outline-none resize-none transition-all font-pretendard" placeholder="프로젝트 문의 내용을 적어주세요." /><button type="submit" className="w-full text-white font-black py-5 rounded-xl hover:bg-slate-800 transition-all shadow-xl shadow-orange-900/10 uppercase tracking-widest font-pretendard" style={{ backgroundColor: brandColor }}>Send Message</button>
-            </form>
+        <div className="max-w-[1600px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-24 font-pretendard text-center md:text-left">
+          <div className="font-pretendard">
+            <span className="font-bold tracking-[0.3em] text-sm uppercase mb-6 block font-pretendard" style={{ color: brandColor }}>03 / CONTACT US</span>
+            <h2 className="text-3xl md:text-5xl font-black mb-12 tracking-tighter italic leading-none font-pretendard text-slate-900 text-left">Work Together</h2>
+            <div className="space-y-10 font-pretendard">
+              <div className="flex items-start space-x-6 font-pretendard">
+                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 font-pretendard shrink-0" style={{ color: brandColor }}><MapPin size={24} /></div>
+                <div className="text-left"><h4 className="font-black text-xs text-slate-400 uppercase tracking-widest mb-2 font-pretendard">Studio</h4><p className="text-xl font-bold font-pretendard text-slate-900">경남 창원시 마산회원구 3·15대로 509 3층</p></div>
+              </div>
+              <div className="flex items-start space-x-6 font-pretendard">
+                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 font-pretendard shrink-0" style={{ color: brandColor }}><Mail size={24} /></div>
+                <div className="text-left"><h4 className="font-black text-xs text-slate-400 uppercase tracking-widest mb-2 font-pretendard">Email</h4><p className="text-xl font-bold font-pretendard text-slate-900">hh3131@naver.com</p></div>
+              </div>
+              <div className="flex items-start space-x-6 font-pretendard">
+                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 font-pretendard shrink-0" style={{ color: brandColor }}><Phone size={24} /></div>
+                <div className="text-left"><h4 className="font-black text-xs text-slate-400 uppercase tracking-widest mb-2 font-pretendard">Tel</h4><p className="text-xl font-bold font-pretendard text-slate-900">055-609-1063</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-fit">
+            <a href={socialLinks.kakao} target="_blank" rel="noopener noreferrer" className="group p-8 bg-amber-50 rounded-[32px] border border-amber-100 flex flex-col justify-between hover:bg-[#EE7123] hover:text-white transition-all duration-500 shadow-sm hover:shadow-2xl hover:-translate-y-2">
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-amber-900 mb-8 group-hover:scale-110 transition-transform duration-500"><KakaoIcon size={32} /></div>
+              <div><h4 className="font-black text-lg mb-1 uppercase tracking-tight">KakaoTalk</h4><p className="text-xs font-bold opacity-60">채널 실시간 상담하기</p></div>
+            </a>
+            <a href={socialLinks.blog} target="_blank" rel="noopener noreferrer" className="group p-8 bg-emerald-50 rounded-[32px] border border-emerald-100 flex flex-col justify-between hover:bg-[#EE7123] hover:text-white transition-all duration-500 shadow-sm hover:shadow-2xl hover:-translate-y-2">
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-emerald-900 mb-8 group-hover:scale-110 transition-transform duration-500"><BlogIcon size={32} /></div>
+              <div><h4 className="font-black text-lg mb-1 uppercase tracking-tight">Naver Blog</h4><p className="text-xs font-bold opacity-60">작업 비하인드 스토리</p></div>
+            </a>
+            <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="group p-8 bg-red-50 rounded-[32px] border border-red-100 flex flex-col justify-between hover:bg-[#EE7123] hover:text-white transition-all duration-500 shadow-sm hover:shadow-2xl hover:-translate-y-2">
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-red-900 mb-8 group-hover:scale-110 transition-transform duration-500"><Youtube size={32} /></div>
+              <div><h4 className="font-black text-lg mb-1 uppercase tracking-tight">YouTube</h4><p className="text-xs font-bold opacity-60">디자인 포트폴리오 영상</p></div>
+            </a>
+            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="group p-8 bg-purple-50 rounded-[32px] border border-purple-100 flex flex-col justify-between hover:bg-[#EE7123] hover:text-white transition-all duration-500 shadow-sm hover:shadow-2xl hover:-translate-y-2">
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-purple-900 mb-8 group-hover:scale-110 transition-transform duration-500"><Instagram size={32} /></div>
+              <div><h4 className="font-black text-lg mb-1 uppercase tracking-tight">Instagram</h4><p className="text-xs font-bold opacity-60">공식 인스타그램 팔로우</p></div>
+            </a>
           </div>
         </div>
       </section>
@@ -500,8 +578,10 @@ const App = () => {
         .animate-in { animation-duration: 0.5s; animation-fill-mode: both; }
         .fade-in { animation-name: fadeIn; }
         .slide-in-from-bottom { animation-name: slideInBottom; }
+        .slide-in-from-top-2 { animation-name: slideInTop2; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideInBottom { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideInTop2 { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes subtle-zoom { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
         .animate-subtle-zoom { animation: subtle-zoom 20s ease-out infinite alternate; }
       `}</style>
