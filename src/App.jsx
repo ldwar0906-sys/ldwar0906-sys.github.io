@@ -126,17 +126,27 @@ const generateProjects = () => {
 
   const addSmartSeries = (category, dataMap) => {
     Object.entries(dataMap).forEach(([sub, data]) => {
-      data.ids.forEach((folderName) => {
-        if (folderName && folderName.trim()) {
+      data.ids.forEach((item) => {
+        if (!item) return;
+
+        let folderName = "";
+        let displayTitle = "";
+
+        // ⭐️ [기능 추가] item이 문자열이면 기존 방식, 객체면 커스텀 제목 방식
+        if (typeof item === 'string' && item.trim()) {
+          folderName = item;
           const underscoreIndex = folderName.indexOf('_');
-          let displayTitle = "";
-          
           if (underscoreIndex !== -1) {
             displayTitle = folderName.substring(underscoreIndex + 1);
           } else {
             displayTitle = `${sub} 작업 ${folderName.replace('no', '')}`;
           }
+        } else if (typeof item === 'object') {
+          folderName = item.folder;
+          displayTitle = item.title;
+        }
 
+        if (folderName && folderName.trim()) {
           projects.push({
             id: idCounter++,
             category,
@@ -146,7 +156,6 @@ const generateProjects = () => {
             srcBase: `${baseUrl}${data.path}/${folderName}/1`,
             seriesBasePath: `${baseUrl}${data.path}/${folderName}`,  
             title: displayTitle,
-            year: "2024",
             description: `${sub} 기획 및 디자인 결과물입니다.`
           });
         }
@@ -154,27 +163,51 @@ const generateProjects = () => {
     });
   };
 
+  // ⭐️ [포트폴리오 폴더 및 제목 설정하는 곳] ⭐️
   const editorialData = {
     "카달로그·브로슈어": { 
       path: "/images/EDITORIAL/CatalogBrochure", 
       ids: [
-        "no1_경남대학교 캡스톤디자인 운영 매뉴얼북",
-        "no2_경상남도 응급의료지원단 CI매뉴얼북",
-        "no3_경상남도 자립지원전담기관 소식지",
-        "no4_울산광역시 어린이독서체험관 캐릭터 매뉴얼북",
-        "no5_이플로우 카달로그",
-        "no6_SM 엔지니어링 카달로그",
-        "no7_MTS 카달로그",
-        "no8_모드텍 카달로그",
-        "no9_서현 카달로그",
-        "no10_세덕종합벨트 카달로그",
-        "no11_원진 BMT",
-        "no12_웰템 카달로그",
-        "no13_태양테크 회사소개서"
+        { folder: "no1_경남대학교 캡스톤디자인 운영 매뉴얼북", title: "경남대학교 캡스톤디자인 운영 매뉴얼북 38P" },
+        { folder: "no2_경상남도 응급의료지원단 CI매뉴얼북", title: "경상남도응급의료지원단 CI 매뉴얼북 24P" },
+        { folder: "no3_경상남도 자립지원전담기관 소식지", title: "경상남도자립지원전담기관 소식지 20P" },
+        { folder: "no4_울산광역시 어린이독서체험관 캐릭터 매뉴얼북", title: "울산광역시 어린이독서체험관 캐릭터 매뉴얼북 20P" },
+        { folder: "no5_이플로우 카달로그", title: "기업 이플로우 카달로그 32P" },
+        { folder: "no6_SM 엔지니어링 카달로그", title: "기업 SM엔지니어링 카달로그 32P" },
+        { folder: "no7_MTS 카달로그", title: "기업 MTS 카달로그 48P" },
+        { folder: "no8_모드텍 카달로그", title: "기업 모드텍 카달로그 24P" },
+        { folder: "no9_서현 카달로그", title: "기업 서현 카달로그 24P" },
+        { folder: "no10_세덕종합벨트 카달로그", title: "기업 세덕종합벨트 카달로그 28P" },
+        { folder: "no11_원진 BMT", title: "기업 원진 BMT 32P" },
+        { folder: "no12_웰템 카달로그", title: "기업 웰템 카달로그 32P" },
+        { folder: "no13_태양테크 회사소개서", title: "기업 태양테크 회사소개서 28P" }
       ] 
     },
-    "리플렛·팜플렛": { path: "/images/EDITORIAL/LeafletPamphlet", ids: [] },
-    "포스터": { path: "/images/EDITORIAL/Poster", ids: [] }
+    "리플렛·팜플렛": { 
+      path: "/images/EDITORIAL/LeafletPamphlet", 
+      ids: [
+        { folder: "no1_몽골어 경남대학교 외국인 특별전형 모집 리플렛", title: "경남대학교 외국인 특별전형 모집 대문접지 리플렛 몽골어 버전" },
+        { folder: "no2_영문 경남대학교 외국인 특별전형 모집 리플렛", title: "경남대학교 외국인 특별전형 모집 대문접지 리플렛 영어 버전" },
+        { folder: "no3_중문 _몽골어 경남대학교 외국인 특별전형 모집 리플렛", title: "경남대학교 외국인 특별전형 모집 대문접지 리플렛 중국어 버전" },
+        { folder: "no4_함안대산중학교 대문접지형 리플렛", title: "함안대산중학교 대문접지형 리플렛" },
+        { folder: "no5_3. 창신대학교_문덕수문학관 리플렛", title: "창신대학교_문덕수문학관 리플렛" },
+        { folder: "no6_4. 제품소개서 리플렛_타일회사 동양석재", title: "타일회사 동양석재 리플렛" },
+        { folder: "no7_5. 울산시교육청_어린이독서체험관 리플렛", title: "울산시교육청_어린이독서체험관 리플렛" },
+        { folder: "no8_6. 기업 소개서 팜플렛_오앤어스", title: "기업 소개서 팜플렛_오앤어스" },
+        { folder: "no9_7. 캘리그라피협회 3단 리플렛 6P", title: "캘리그라피협회 3단 리플렛 6P" },
+        { folder: "no10_8. 무용단체_춤터별진 3단 리플렛6P", title: "무용단체_춤터별진 3단 리플렛6P" },
+        { folder: "no11_9. KDS연주회 리플렛", title: "KDS연주회 리플렛" },
+        { folder: "no12_10. 경남대학교_글로벌한마 리플렛", title: "" },
+        { folder: "no13_경남대학교_국제처 모집 대문접지형 리플렛 한국어", title: "경남대학교_국제처 모집 대문접지형 리플렛 한국어 버전" },
+        { folder: "no14_경남대학교_국제처 모집 대문접지형 리플렛 영문", title: "경남대학교_국제처 모집 대문접지형 리플렛 영어 버전" },
+        { folder: "no15_경남대학교_국제처 모집 대문접지형 리플렛 중문", title: "경남대학교_국제처 모집 대문접지형 리플렛 중국어 버전" },
+        { folder: "no16_경북경찰청어린이집_대문접지형 리플렛 6p", title: "경북경찰청어린이집_대문접지형 리플렛 6p" },
+        { folder: "no17_경남환경미디어협회_미디어 환경 교육", title: "경남환경미디어협회_미디어 환경 교육 리플렛" },
+        { folder: "", title: "" },
+        { folder: "", title: "" },
+      ] 
+    },
+    "홍보물·패키지": { path: "/images/EDITORIAL/Poster", ids: [] }
   };
   addSmartSeries("EDITORIAL", editorialData);
 
@@ -190,15 +223,49 @@ const generateProjects = () => {
   const brandingImages = ["https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=800"];
   brandingImages.forEach((img, i) => {
     if (img && img.trim()) {
-      projects.push({ id: idCounter++, category: "BRANDING", img: img, title: `브랜딩 작업 ${i + 1}`, year: "2024", description: "브랜드 아이덴티티 구축 프로젝트입니다." });
+      projects.push({ id: idCounter++, category: "BRANDING", img: img, title: `브랜딩 작업 ${i + 1}`,
+        description: "브랜드 아이덴티티 구축 프로젝트입니다." });
     }
   });
 
-  const videoIds = [{ id: "hsS_3X64YbE", start: 3248 }, { id: "Abh9eKQcIuE" }, { id: "FOOkzuEfwXk", start: 874 }];
-  videoIds.forEach((v, i) => {
-    if (v && v.id && v.id.trim()) {
-      projects.push({ id: idCounter++, category: "VIDEO", youtubeId: v.id, startParam: v.start ? `&start=${v.start}` : "", img: `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`, title: `영상 작업 ${i + 1}`, year: "2024", description: "영상 제작 프로젝트입니다." });
-    }
+  // ⭐️ [영상 제작 (YouTube) 세부 카테고리 분류] ⭐️
+  const videoData = {
+    "공연,행사": [
+      { id: "hsS_3X64YbE", title: "공연 영상 제작_혼인대첩 우첨지댁 경사" },
+      { id: "Abh9eKQcIuE", title: "국악창작그룹 라금 _ 너영나영(you&i), 은하수 연주" },
+      { id: "FOOkzuEfwXk", title: "공연 영상 제작 l 드론 촬영 l 영상 제작 _ 국악창작그룹 라금" },
+      { id: "dtAcRD_AijY", title: "창신대학교 춤추는 시 몸으로 읽는 문덕수 무용 교육 영상" },
+      { id: "yYfLUnz4tpM", title: "무용단체 춤터별진 본공연 촬영 및 편집 영상제작 프로젝트"}
+    ],
+    "홍보영상": [
+      { id: "Ka-zWBdTG0I", title: "무용단체 춤터별진 홍보영상"},
+      { id: "lPO37dawKVc", title: "그레이시티 유튜브 인터뷰영상"},
+      { id: "xQmi6Lz6rDw", title: "그레이시티 고객 인터뷰 영상"},
+      { id: "ZL6eVld7HVs", title: "창원시립소년소녀합창단 메이킹 영상 제작 "},
+      { id: "PaJnjh8q7YU", title: "함안 한별도그파크 홍보영상"}
+    ],
+    "정보 전달형 영상": [
+      { id: "U6AgLF7TMpU", title: "경남대학교 링크사업단 캡스톤디자인 매뉴얼영상_1편"},
+      { id: "xF0MLK3cFdM", title: "경남대학교 링크사업단 캡스톤디자인 매뉴얼영상_2편"},
+      { id: "Cy6GsYK28O0", title: "2025년 장애인협회 실적보고 영상제작 프로젝트"}
+    ]
+  };
+
+  Object.entries(videoData).forEach(([sub, videos]) => {
+    videos.forEach((v, i) => {
+      if (v && v.id && v.id.trim()) {
+        projects.push({ 
+          id: idCounter++, 
+          category: "VIDEO", 
+          subCategory: sub, 
+          youtubeId: v.id, 
+          startParam: v.start ? `&start=${v.start}` : "", 
+          img: `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`, 
+          title: v.title || `${sub} 영상 ${i + 1}`, 
+          description: `${sub} 프로젝트입니다.` 
+        });
+      }
+    });
   });
 
   return projects;
@@ -229,7 +296,7 @@ const ProjectCard = React.memo(({ project, currentTab, onSelect, onFail }) => {
       <div>
         <span className="text-[11px] font-bold tracking-widest uppercase mb-2 block" style={{ color: brandColor }}>{project.subCategory || project.category}</span>
         <h3 className="text-2xl font-bold mb-2 group-hover:text-[#EE7123] transition-colors tracking-tight text-white font-pretendard">{project.title}</h3>
-        <p className="text-slate-500 font-medium text-sm font-pretendard">{project.year} | Visual Solution</p>
+        <p className="text-slate-500 font-medium text-sm font-pretendard"> Visual Solution</p>
       </div>
     </div>
   );
@@ -262,11 +329,11 @@ const App = () => {
 
   const categoryData = [
     { id: 'ALL', kr: '전체보기', sub: [] },
-    { id: 'EDITORIAL', kr: '편집디자인', sub: ['전체', '카달로그·브로슈어', '리플렛·팜플렛', '포스터'] },
+    { id: 'EDITORIAL', kr: '편집디자인', sub: ['전체', '카달로그·브로슈어', '리플렛·팜플렛', '홍보물·패키지'] },
     { id: 'BRANDING', kr: '브랜딩', sub: [] },
     { id: 'SIGNAGE', kr: '실·내외 사인물', sub: ['전체', '간판·시트지', '현수막·배너'] },
     { id: 'WEB', kr: '웹 콘텐츠', sub: [] },
-    { id: 'VIDEO', kr: '영상제작', sub: [] }
+    { id: 'VIDEO', kr: '영상제작', sub: ['전체', '공연,행사', '홍보영상', '정보 전달형 영상'] }
   ];
 
   const filteredProjects = useMemo(() => {
@@ -347,7 +414,7 @@ const App = () => {
             <div className="flex flex-col items-center text-center mb-16 animate-in slide-in-from-bottom duration-700">
               <div className="flex items-center space-x-4 mb-6">
                 <span className="px-5 py-2 bg-orange-50 text-[#EE7123] rounded-full text-xs font-black tracking-widest uppercase shadow-sm">{selectedProject.subCategory || selectedProject.category}</span>
-                <span className="text-slate-400 font-bold text-xs">2024 PORTFOLIO</span>
+                <span className="text-slate-400 font-bold text-xs">PORTFOLIO</span>
               </div>
               <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-8 leading-tight text-slate-900">{selectedProject.title}</h2>
               <p className="text-lg text-slate-600 leading-relaxed font-light max-w-3xl mb-12">{selectedProject.description}</p>
@@ -394,9 +461,10 @@ const App = () => {
                   </button>
                 ))}
               </div>
-              {(activeCategory === 'EDITORIAL' || activeCategory === 'SIGNAGE') && (
+              
+              {['EDITORIAL', 'SIGNAGE', 'VIDEO'].includes(activeCategory) && (
                 <div className="flex flex-wrap gap-2 mb-12 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit mx-auto md:mx-0 font-pretendard animate-in fade-in zoom-in duration-500">
-                  {categoryData.find(c => c.id === activeCategory).sub.map(sub => (
+                  {categoryData.find(c => c.id === activeCategory)?.sub.map(sub => (
                     <button key={`archive-sub-${sub}`} onClick={() => setActiveSubCategory(sub)} className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeSubCategory === sub ? 'bg-[#EE7123] text-white' : 'text-slate-400 hover:text-white font-pretendard'}`}>{sub}</button>
                   ))}
                 </div>
@@ -405,7 +473,7 @@ const App = () => {
             <div className="mb-6 text-slate-400 text-sm font-bold tracking-widest uppercase font-pretendard">Showing: <span className="text-white">{filteredProjects.length}</span> Projects</div>
             <div className={`grid md:grid-cols-2 ${activeCategory === 'VIDEO' ? 'lg:grid-cols-2 max-w-6xl mx-auto' : 'lg:grid-cols-4'} gap-x-6 gap-y-12 pb-24 font-pretendard`}>
               {filteredProjects.map((project) => (
-                <ProjectCard key={`archive-card-${project.id}`} project={project} currentTab={activeCategory} onSelect={handleSelectProject} onFail={() => handleProjectFail(id)} />
+                <ProjectCard key={`archive-card-${project.id}`} project={project} currentTab={activeCategory} onSelect={handleSelectProject} onFail={() => handleProjectFail(project.id)} />
               ))}
             </div>
           </div>
@@ -413,27 +481,40 @@ const App = () => {
       )}
 
       {/* 내비게이션 바 */}
-      <nav className={`fixed w-full z-[100] transition-all duration-500 ${isScrolled ? 'bg-white py-3 shadow-md border-b border-slate-100' : 'bg-transparent py-6'}`}>
+      <nav className={`fixed w-full z-[100] transition-all duration-500 ${isScrolled ? 'bg-white py-3 shadow-sm' : 'bg-transparent py-6'}`}>
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 flex justify-between items-center font-pretendard">
-          <div className="flex items-center"><a href="#home" className={`text-2xl tracking-tight transition-colors duration-300 flex items-baseline gap-1 ${!isScrolled ? 'text-white' : 'text-slate-900'}`}><span className="font-black" style={{ color: brandColor }}>ART</span><span className="font-light" style={{ color: brandColor }}>DESIGN</span></a></div>
+          <div className="flex items-center">
+            <a href="#home" className={`text-2xl tracking-tight transition-colors duration-300 flex items-baseline gap-1 ${!isScrolled ? 'text-white' : 'text-slate-900'}`}>
+              <span className="font-black" style={{ color: brandColor }}>ART</span>
+              <span className="font-light" style={{ color: brandColor }}>DESIGN</span>
+            </a>
+          </div>
           <div className="hidden lg:flex items-center space-x-12 font-pretendard">
             {navLinks.map((link) => (
               <a key={link.id} href={`#${link.id}`} className={`text-[14px] font-bold transition-colors ${!isScrolled ? 'text-white' : 'text-slate-700'} hover:text-[#EE7123] ${activeSection === link.id ? 'text-[#EE7123]' : ''} font-pretendard`}>{link.en}</a>
             ))}
           </div>
-          <button className={`lg:hidden ${!isScrolled ? 'text-white' : 'text-slate-900'}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>{isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
+          <button className={`lg:hidden ${!isScrolled ? 'text-white' : 'text-slate-900'}`} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
+        
+        {/* 모바일 반투명 블랙 드롭다운 메뉴창 */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-slate-100 flex flex-col py-2 animate-in slide-in-from-top-2 duration-300 font-pretendard">
+          <div className="lg:hidden absolute top-full left-0 w-full bg-slate-900/50 backdrop-blur-md shadow-2xl flex flex-col py-2 animate-in slide-in-from-top-2 duration-300 font-pretendard border-t border-white/10">
             {navLinks.map((link) => (
               <a 
                 key={`mobile-${link.id}`} 
                 href={`#${link.id}`} 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`px-8 py-5 text-[15px] font-black tracking-widest flex items-center justify-between border-b border-slate-50 last:border-0 ${activeSection === link.id ? 'text-[#EE7123] bg-orange-50/50' : 'text-slate-600 hover:bg-slate-50'}`}
+                className={`px-8 py-5 text-[15px] font-black tracking-widest flex items-center justify-between border-b border-white/5 last:border-0 transition-colors ${
+                  activeSection === link.id 
+                    ? 'text-[#EE7123] bg-black/50' 
+                    : 'text-slate-300 hover:text-white hover:bg-white/5'
+                }`}
               >
                 <span>{link.en}</span>
-                <span className="text-xs font-bold text-slate-400">{link.kr}</span>
+                <span className="text-xs font-bold opacity-60">{link.kr}</span>
               </a>
             ))}
           </div>
@@ -441,13 +522,16 @@ const App = () => {
       </nav>
 
       {/* Hero */}
-      <section id="home" className="relative h-screen flex items-center bg-slate-950 font-pretendard">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1600')] bg-cover bg-center opacity-40 animate-subtle-zoom" />
+      <section id="home" className="relative h-screen flex items-center bg-slate-950 font-pretendard overflow-hidden">
+        {/* ⭐️ 수정한 부분: 로컬 메인 배너 이미지 연결 ⭐️ */}
+        <div className="absolute inset-0 bg-[url('/images/MAIN/main_bg.jpg')] bg-cover bg-center opacity-40 animate-subtle-zoom" />
         <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-12 text-white font-pretendard">
           <span className="inline-block font-bold tracking-[0.4em] text-sm mb-4 uppercase italic font-pretendard" style={{ color: brandColor }}>Visual & Motion Studio</span>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-loose uppercase font-pretendard">
-          <span className="block mb-2">감각을 담아,</span> 
-          <span className="block">일상을 더하다.</span>
+          <h1 className="text-4xl md:text-6xl font-black tracking-[0.1em] mb-8 leading-normal uppercase font-pretendard">
+            <span className="font-extrabold">감각</span>
+            <span className="font-light">을 담아,</span>
+            <span className="font-extrabold">일상</span>
+            <span className="font-light">에 더하다.</span>
           </h1>
           <a href="#create" className="px-10 py-5 bg-[#EE7123] rounded-full font-bold inline-flex items-center group shadow-xl transition-transform hover:scale-105 uppercase tracking-widest text-sm font-pretendard">Project Archive <ArrowUpRight className="ml-2 group-hover:rotate-45 transition-transform" /></a>
         </div>
@@ -458,11 +542,12 @@ const App = () => {
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-20 items-start font-pretendard">
           <div className="sticky top-32">
             <span className="font-bold tracking-[0.3em] text-sm uppercase mb-6 block font-pretendard" style={{ color: brandColor }}>01 / COMPANY</span>
-            <h2 className="text-3xl md:text-4xl font-black mb-8 tracking-tighter font-pretendard leading-tight text-slate-900">
-              보이는 디자인을 넘어,<br />경험을 디자인합니다.<br />시각 디자인 전문회사 아트디자인
+            <h2 className="text-2xl md:text-4xl font-bold mb-5 tracking-tighter font-pretendard leading-tight text-slate-900">
+             <span className="block mb-1 md:mb-2">보이는 디자인을 넘어, 경험을 디자인합니다.</span>
+             <span className="block">시각디자인 전문 회사 아트디자인</span>
             </h2>
-            <p className="text-slate-500 text-lg leading-relaxed mb-10 font-light font-pretendard">
-              브랜딩부터 편집, 인쇄, 영상, 사인물, 공간까지<br />아트디자인은 일상 속 브랜드 경험을 만들어갑니다.
+            <p className="text-slate-500 text-lg leading-snug mb-4 font-light font-pretendard">
+              브랜딩부터 편집, 인쇄, 영상, 사인물, 공간까지<br className="hidden md:block"/>아트디자인은 일상 속 브랜드 경험을 만들어갑니다.
             </p>
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 mt-12 font-pretendard">
               <div className="flex items-center space-x-4"><div className="p-3 bg-orange-50 rounded-xl" style={{ color: brandColor }}><Tag size={24}/></div><div className="font-bold font-pretendard">Branding</div></div>
@@ -473,7 +558,8 @@ const App = () => {
           </div>
           <div className="space-y-12">
             <div className="aspect-[16/10] bg-slate-100 rounded-3xl overflow-hidden shadow-2xl relative border border-slate-100 group">
-              <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1200&auto=format&fit=crop" alt="Studio" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              {/* ⭐️ 수정한 부분: 로컬 컴퍼니 섹션 이미지 연결 ⭐️ */}
+              <img src="/images/MAIN/company_img.jpg" alt="Studio" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             </div>
             <div className="grid grid-cols-2 gap-10 font-pretendard">
               <div><div className="text-4xl font-black text-slate-900 mb-2 tracking-tight">1,200+</div><div className="text-sm font-bold text-slate-400 uppercase tracking-widest font-pretendard">Works</div></div>
@@ -486,7 +572,7 @@ const App = () => {
       {/* PORTFOLIO */}
       <section id="create" className="py-32 bg-slate-950 text-white font-pretendard">
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 font-pretendard">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 font-pretendard">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8 font-pretendard">
             <div><span className="font-bold tracking-[0.3em] text-sm uppercase mb-4 block font-pretendard" style={{ color: brandColor }}>02 / WHAT WE CREATE</span><h2 className="text-3xl md:text-5xl font-black tracking-tighter italic font-pretendard">Portfolio</h2></div>
             <div className="flex flex-wrap gap-4 font-pretendard">
               {categoryData.map((cat) => (
@@ -495,9 +581,9 @@ const App = () => {
             </div>
           </div>
 
-          {(activeCategory === 'EDITORIAL' || activeCategory === 'SIGNAGE') && (
+          {(activeCategory === 'EDITORIAL' || activeCategory === 'SIGNAGE' || activeCategory === 'VIDEO') && (
             <div className="flex flex-wrap gap-2 mb-12 bg-white/5 p-2 rounded-2xl border border-white/10 w-fit font-pretendard">
-              {categoryData.find(c => c.id === activeCategory).sub.map(sub => (
+              {categoryData.find(c => c.id === activeCategory)?.sub.map(sub => (
                 <button key={`sub-tab-${sub}`} onClick={() => setActiveSubCategory(sub)} className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeSubCategory === sub ? 'bg-[#EE7123] text-white' : 'text-slate-400 hover:text-white font-pretendard'}`}>{sub}</button>
               ))}
             </div>
@@ -530,7 +616,7 @@ const App = () => {
               </div>
               <div className="flex items-start space-x-6 font-pretendard">
                 <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 font-pretendard shrink-0" style={{ color: brandColor }}><Mail size={24} /></div>
-                <div className="text-left"><h4 className="font-black text-xs text-slate-400 uppercase tracking-widest mb-2 font-pretendard">Email</h4><p className="text-xl font-bold font-pretendard text-slate-900">hh3131@naver.com</p></div>
+                <div className="text-left"><h4 className="font-black text-xs text-slate-400 uppercase tracking-widest mb-2 font-pretendard">Email</h4><p className="text-xl font-bold font-pretendard text-slate-900">design10040@naver.com</p></div>
               </div>
               <div className="flex items-start space-x-6 font-pretendard">
                 <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center border border-orange-100 font-pretendard shrink-0" style={{ color: brandColor }}><Phone size={24} /></div>
@@ -560,13 +646,61 @@ const App = () => {
         </div>
       </section>
 
-      <footer className="bg-slate-900 text-white py-12 border-t border-white/5 font-pretendard">
-        <div className="max-w-[1600px] mx-auto px-6 lg:px-12 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left font-pretendard">
-          <div className="flex items-baseline gap-1 font-pretendard"><span className="font-black text-2xl font-pretendard" style={{ color: brandColor }}>ART</span><span className="font-light text-2xl font-pretendard" style={{ color: brandColor }}>DESIGN</span></div>
-          <p className="text-slate-500 text-sm italic font-pretendard">© 2024 ArtDesign Visual Group. All rights reserved.</p>
-          <div className="flex space-x-6 font-pretendard"><Instagram className="cursor-pointer hover:text-[#EE7123] transition-colors font-pretendard" /><Facebook className="cursor-pointer hover:text-[#EE7123] transition-colors font-pretendard" /></div>
+      <footer className="bg-slate-900 text-white py-16 border-t border-white/5 font-pretendard">
+        <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
+          
+          {/* 상단 섹션: 로고 및 기업 정보 */}
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
+            <div className="space-y-6">
+              {/* 로고 */}
+              <div className="flex items-baseline gap-1">
+                <span className="font-black text-2xl" style={{ color: brandColor }}>ART</span>
+                <span className="font-light text-2xl" style={{ color: brandColor }}>DESIGN</span>
+              </div>
+              
+              {/* 법적 명시 사항 (사업자 등록 번호 등은 실제 번호로 수정하세요) */}
+              <div className="text-slate-400 text-[13px] leading-relaxed font-light">
+                <div className="flex flex-wrap gap-x-4 gap-y-1 mb-2">
+                  <span><strong>상호명</strong> 아트디자인</span>
+                  <span><strong>대표자</strong> 김희수</span>
+                  <span><strong>사업자등록번호</strong> 477-26-01631</span>
+                </div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1">
+                  <span><strong>주소</strong> 경남 창원시 마산회원구 3·15대로 509 3층</span>
+                  <span><strong>이메일</strong> design10040@naver.com</span>
+                  <span><strong>Tel</strong> 055-609-1063</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 메뉴 링크 (퀵메뉴) */}
+            <div className="flex gap-16">
+              <div>
+                <h4 className="text-white font-bold text-sm tracking-widest uppercase mb-4">Menu</h4>
+                <ul className="text-slate-500 text-[13px] space-y-2 uppercase font-bold">
+                  <li><a href="#company" className="hover:text-[#EE7123] transition-colors">Company</a></li>
+                  <li><a href="#create" className="hover:text-[#EE7123] transition-colors">Portfolio</a></li>
+                  <li><a href="#contact" className="hover:text-[#EE7123] transition-colors">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* 하단 섹션: 카피라이트 및 정책 */}
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+            {/* 카피라이트 표시 */}
+            <p className="text-slate-500 text-[12px] tracking-wide font-medium uppercase">
+              © 2026 ArtDesign Visual Group. All rights reserved.
+            </p>
+            
+            {/* 정책 링크 */}
+            <div className="flex gap-6 text-slate-500 text-[11px] font-bold uppercase tracking-widest">
+              <span className="cursor-pointer hover:text-white transition-colors">Privacy Policy</span>
+              <span className="cursor-pointer hover:text-white transition-colors">Terms of Use</span>
+            </div>
+          </div>
         </div>
-      </footer>
+      </footer>      
 
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
