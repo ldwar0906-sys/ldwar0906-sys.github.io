@@ -210,32 +210,79 @@ const generateProjects = () => {
         { folder: "no22_무용단체_춤터별진 눈이부시게 공연 리플렛", title: "무용단체_춤터별진 눈이부시게 공연 리플렛" },
         { folder: "no23_뮤지컬공연 팜플렛 8p_고운초등학교 팜플렛", title: "뮤지컬공연 팜플렛 8p_고운초등학교 팜플렛" },
         { folder: "no24_미술전시_강현정 작가 리플렛", title: "미술전시_강현정 작가 리플렛" },
-        { folder: "no25_미술전시_정현숙 작가 리플렛", title: "미술전시_정현숙 작가 리플렛" },
-        { folder: "", title: "" },
-
-
+        { folder: "no25_미술전시_정현숙 작가 리플렛", title: "미술전시_정현숙 작가 리플렛" }
       ] 
     },
-    "홍보물·패키지": { path: "/images/EDITORIAL/Poster", ids: [] }
+    "홍보물·패키지": { 
+      path: "/images/EDITORIAL/PosterOther", 
+      ids: [
+        { folder: "no1_노블핏 패키지", title: "노블핏 패키지 디자인" },
+        { folder: "no2_이자카야 메뉴판", title: "이자카야_사바하 메뉴판" },
+        { folder: "no3_퓨전주점 메뉴판", title: "퓨전주점_이글루 메뉴판" },
+        { folder: "no4_중식주점 메뉴판", title: "중식주점_코리아야시장 메뉴판" },
+        { folder: "no5_조개구이 메뉴판", title: "조개구이_불티나 조개구이 메뉴판" },
+        { folder: "no6_꼬숩", title: "꼬숩땅콩 전단지" },
+        { folder: "no7_고기집 메뉴판", title: "고깃집_순희식당 메뉴판" },
+        { folder: "no8_한별 봉투 디자인", title: "한별반려동물장례식장 봉투 디자인" },
+        { folder: "no9_헬시드리치", title: "헬시드리치" },
+        { folder: "", title: "" },
+        { folder: "", title: "" },
+        { folder: "", title: "" },
+      ] 
+    }
   };
   addSmartSeries("EDITORIAL", editorialData);
 
   const signageData = {
-    "간판·시트지": { path: "/images/SIGNAGE/SignboardSheet", ids: [] },
-    "현수막·배너": { path: "/images/SIGNAGE/Banner", ids: [] }
+    "간판·시트지": { 
+      path: "/images/SIGNAGE/SignboardSheet", 
+      ids: [
+        { folder: "no1_울산 어린이독서체험관 실외", title: "울산광역시 어린이독서체험관.No1" },
+        { folder: "no2_울산 어린이독서체험관 실내", title: "울산광역시 어린이독서체험관.No2" },
+        { folder: "no3_울산 어린이독서체험관 시트지", title: "울산광역시 어린이독서체험관.NO3" },
+        { folder: "no4_갈바에 부식 느낌", title: "갈바 부식 간판" },
+        { folder: "no5_채널간판, 프레임 다양", title: "채널 간판 작업물" },
+        { folder: "no6_조형물 및 구조물 등", title: "조형물 및 구조물" },
+        { folder: "", title: "" },
+        { folder: "", title: "" },
+        { folder: "", title: "" },
+      ] 
+    },
+    "현수막·배너": { 
+      path: "/images/SIGNAGE/Banner", 
+      ids: [] 
+    }
   };
   addSmartSeries("SIGNAGE", signageData);
 
-  const webData = { "웹 콘텐츠": { path: "/images/WEB/Contents", ids: [] } };
+  const webData = { 
+    "웹 콘텐츠": { 
+      path: "/images/WEB/Contents", 
+      ids: [
+        { folder: "no1_경상남도탄소중립지원센터 카드 뉴스 2회차", title: "경상남도탄소중립지원센터 카드뉴스_2회차" },
+        { folder: "no2_경상남도탄소중립지원센터 카드 뉴스 4회차", title: "경상남도탄소중립지원센터 카드뉴스_4회차" },
+        { folder: "no3_경상남도 도시탐사대", title: "경상남도 도시탐사대 카드뉴스" },
+        { folder: "no4_노블핏", title: "노블핏 쉐이크 상세페이지" },
+        { folder: "no5_시너지애드", title: "시너지애드 상세페이지" },
+        { folder: "no6_우브로 상세페이지", title: "우브로 상세페이지" },
+        { folder: "", title: "" },
+      ] 
+    } 
+  };
   addSmartSeries("WEB", webData);
 
-  const brandingImages = ["https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=800"];
-  brandingImages.forEach((img, i) => {
-    if (img && img.trim()) {
-      projects.push({ id: idCounter++, category: "BRANDING", img: img, title: `브랜딩 작업 ${i + 1}`,
-        description: "브랜드 아이덴티티 구축 프로젝트입니다." });
+  // ⭐️ [브랜딩 데이터 로컬 연동] ⭐️
+  // 기존 하드코딩 배열을 삭제하고 다른 탭처럼 스마트 로딩 방식을 적용했습니다.
+  const brandingData = {
+    "브랜딩": {
+      path: "/images/BRANDING",
+      ids: [
+        // 필요시 이곳에 다음과 같은 양식으로 추가하세요.
+        // { folder: "no1_브랜딩작업", title: "브랜딩 프로젝트 1" },
+      ]
     }
-  });
+  };
+  addSmartSeries("BRANDING", brandingData);
 
   // ⭐️ [영상 제작 (YouTube) 세부 카테고리 분류] ⭐️
   const videoData = {
