@@ -250,7 +250,25 @@ const generateProjects = () => {
     },
     "현수막·배너": { 
       path: "/images/SIGNAGE/Banner", 
-      ids: [] 
+      ids: [
+        { folder: "no1_캘리 교육 배너", title: "공예와 캘리그라피로 만나는 세상 배너" },
+        { folder: "no2_학원 배너", title: "즐거운 뮤직스쿨 배너" },  
+        { folder: "no3_캘리 교육 배너", title: "흙으로 빚고 마음으로 쓰는 예술치유 여행 배너" },
+        { folder: "no4_루프탑 식당 배너", title: "루프탑 캠핑 세트 배너" },
+        { folder: "no5_춤터별진 무용 공연 배너", title: "춤터별진 무용 공연 배너" },
+        { folder: "no6_교육 모집 배너", title: "토요문화학교 교육 배너" },
+        { folder: "no7_창원청년비전센터 배너", title: "창원청년비전센터 배너" },
+        { folder: "no8_진해문화원 교육 배너", title: "진해문화원 교육 배너" },
+        { folder: "no9_해군사관학교 배너", title: "창원시 해군사관학교 배너" },
+        { folder: "no10_YODI 카페 배너 2종", title: "YODI 카페 배너 2종" },
+        { folder: "no11_솔아동발달센터 배너", title: "솔아동발달센터 배너" },
+        { folder: "no12_양식당 아치 배너", title: "양식당 아치 배너" },
+        { folder: "no13_전시 배너 아카이브", title: "전시 배너 아카이브" },
+        { folder: "no14_고등학교 축제 현수막", title: "창원토월고등학교 축제 현수막" },
+        { folder: "no15_행사 강연 현수막", title: "행사, 강연 현수막" },
+        { folder: "no16_기업 박람회 현수막", title: "기업 박람회 현수막" },
+        { folder: "no17_해남126 호텔 현수막", title: "해남126 호텔 현수막" },
+      ] 
     }
   };
   addSmartSeries("SIGNAGE", signageData);
